@@ -1,0 +1,20 @@
+# Pliki tymczasowe i blokady KiCada
+*.lck
+*.tmp
+*.bak
+*.bck
+*-bak
+*~
+_autosave-*
+*.kicad_prl
+
+# Foldery automatycznych kopii zapasowych
+*-backups/
+.history/
+
+# Pamiec podreczna footprintow
+fp-info-cache
+
+# Pliki systemowe
+Thumbs.db
+desktop.ini

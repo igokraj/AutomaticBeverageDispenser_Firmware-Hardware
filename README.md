@@ -1,7 +1,6 @@
 # Automatic Beverage Dispenser
 
-<img width="859" height="593" alt="Schematic" src="https://github.com/user-attachments/assets/16a1fc06-67c5-4b3f-af31-124bc26b16ec" />
-<img width="503" height="617" alt="PCB Design" src="https://github.com/user-attachments/assets/82eb61f9-a659-40de-8878-233f8855dda7" />
+
 <img width="598" height="642" alt="3D view" src="https://github.com/user-attachments/assets/539d1d59-b54e-4790-bd69-474d734e300d" />
 
 

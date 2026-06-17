@@ -227,10 +227,10 @@ if (current_time - last_start_time > DELAY) {
         if (g_state == IDLE) {
             g_pulses = 0;
             g_state  = POURING;
-            HAL_GPIO_WritePin(PUMP_GPIO_Port, PUMP_Pin, GPIO_PIN_SET);   // POMPA ON
+            HAL_GPIO_WritePin(PUMP_GPIO_Port, PUMP_Pin, GPIO_PIN_SET);   // PUMP ON
         } else {
             g_state = IDLE;
-            HAL_GPIO_WritePin(PUMP_GPIO_Port, PUMP_Pin, GPIO_PIN_RESET); // STOP awaryjny
+            HAL_GPIO_WritePin(PUMP_GPIO_Port, PUMP_Pin, GPIO_PIN_RESET); // STOP 
         }
     }
   }

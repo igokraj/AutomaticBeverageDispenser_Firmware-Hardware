@@ -1,5 +1,10 @@
 # Automatic Beverage Dispenser
 
+<img width="859" height="593" alt="Schematic" src="https://github.com/user-attachments/assets/16a1fc06-67c5-4b3f-af31-124bc26b16ec" />
+<img width="503" height="617" alt="PCB Design" src="https://github.com/user-attachments/assets/82eb61f9-a659-40de-8878-233f8855dda7" />
+<img width="598" height="642" alt="3D view" src="https://github.com/user-attachments/assets/539d1d59-b54e-4790-bd69-474d734e300d" />
+
+
 A complete hardware and software solution for an automated beverage dispensing system. The project features a custom 2-layer printed circuit board (PCB) and firmware written in C for the STM32G0 microcontroller. The system accurately dispenses liquids by measuring the flow rate via a dedicated sensor and controlling a 12V fluid pump.
 
 ## Features

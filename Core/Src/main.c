@@ -25,12 +25,15 @@
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 #include "stm32g0xx_hal.h"
+#include "ssd1306.h"
+#include "ssd1306_fonts.h"
 
 #define K_FACTOR_UL 2222 // ml per pulse / 1000 -> 2.222
 #define STEP_ML 50
 #define MIN_ML 50
 #define MAX_ML 300
 #define DELAY 50 // debouncing 
+#define DISPLAY_UPDATE_MS 100
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,6 +57,7 @@
 
 typedef enum {IDLE, POURING} State_t; // 2 states of system
 
+uint32_t g_last_display_update = 0;
 
 // Values at system startup
 
@@ -68,7 +72,7 @@ volatile State_t g_state = IDLE;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+static void Display_Update(uint32_t target_ml, uint32_t poured_ml, State_t state);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -107,6 +111,8 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
+ssd1306_Init();
+
 uint8_t prev_up = 1, prev_down = 1; 
 uint32_t last_up_time = 0, last_down_time = 0; // debouncing 
   /* USER CODE END 2 */
@@ -143,18 +149,27 @@ prev_up = cur;
       }
     }
 prev_down = cur;
-    
+
 
     //  ********** START BUTTON ***********
 
+    uint32_t poured_ml = (g_pulses * K_FACTOR_UL) / 1000; // calculating ml value 
+
     if (g_state == POURING)
     {
-      uint32_t poured_ml = (g_pulses * K_FACTOR_UL) / 1000; // calculating ml value 
       if (poured_ml >= g_target)
       {
         HAL_GPIO_WritePin(PUMP_GPIO_Port, PUMP_Pin, GPIO_PIN_RESET);
         g_state = IDLE; // RESET
     }
+    }
+
+    //  ********** DISPLAY ***********
+
+    if (HAL_GetTick() - g_last_display_update > DISPLAY_UPDATE_MS)
+    {
+      Display_Update(g_target, poured_ml, g_state);
+      g_last_display_update = HAL_GetTick();
     }
 
     /* USER CODE END WHILE */
@@ -234,6 +249,32 @@ if (current_time - last_start_time > DELAY) {
         }
     }
   }
+}
+
+
+static void Display_Update(uint32_t target_ml, uint32_t poured_ml, State_t state)
+{
+  char line1[16];
+  char line2[16];
+
+  ssd1306_Fill(Black);
+
+  snprintf(line1, sizeof(line1), "Target: %lu ml", (unsigned long)target_ml);
+  ssd1306_SetCursor(0, 0);
+  ssd1306_WriteString(line1, Font_7x10, White);
+
+  if (state == POURING)
+  {
+    snprintf(line2, sizeof(line2), "Pour: %lu ml", (unsigned long)poured_ml);
+  }
+  else
+  {
+    snprintf(line2, sizeof(line2), "Ready");
+  }
+
+  ssd1306_SetCursor(0, 20);
+  ssd1306_WriteString(line2, Font_7x10, White);
+  ssd1306_UpdateScreen();
 }
 /* USER CODE END 4 */
 
